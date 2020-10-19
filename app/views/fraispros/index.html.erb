@@ -1,0 +1,61 @@
+<h1>Vos Frais Pro</h1>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<% x = 0 %>
+<% while x != 12%>
+<%x += 1%>
+  <% count = 0 %>
+  
+  <% @fraispros.each do |f| %>
+  <% if f.date.strftime("%m") == if x < 10 then "0"+x.to_s else x.to_s end %>
+  <% count += 1%>
+  <% end %>
+  <% end %>
+  <% if count != 0 %>
+  <h2><%= Date::MONTHNAMES[x]+" 2020" %></h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Description</th>
+        <th scope="col">Bank</th>
+        <th scope="col">Date</th>
+        <th scope="col">Total</th>
+        <th scope="col">% pro</th>
+        <th scope="col">% admis</th>
+        <th scope="col">Montant</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% @fraispros.each do |f| %>
+      <% if f.date.strftime("%m") == if x < 10 then "0"+x.to_s else x.to_s end %> 
+      <tr>
+          <th scope="row"><%= f.description %></th>
+          <td><%= f.bank %></td>
+          <td><%= f.date %></td>
+          <td><%= f.total %></td>
+          <td><%= f.privepro %></td>
+          <td><%= f.deductibilite %></td>
+          <td><%= f.montant %></td>
+          <td>
+              <% if f.facture == nil %>
+              <% else %>
+                <% if f.facture.include? "http" %>
+                <a href="<%= f.facture %>" class="btn btn-success"><i class="material-icons">description</i></a>
+                <% elsif f.facture.include? "www" %>
+                <a href="<%= "http://"+f.facture %>" class="btn btn-success"><i class="material-icons">description</i></a>
+                <% elsif f.facture.include? "." %>
+                <a href="<%= "http://"+f.facture %>" class="btn btn-success"><i class="material-icons">description</i></a>
+                <% end %>
+              <% end %>
+              <a href="<%= edit_fraispro_path(f.id) %>" class="btn btn-primary"> <i class="material-icons">edit</i></a>
+              <a href="<%= fraispro_path(f.id)%>" class="btn btn-danger" data-method="DELETE"><i class="material-icons">delete</i></a>
+          </td>
+      </tr>
+      <% end %>
+    <%end%>
+    </tbody>
+  </table>
+  <% end %>
+<% end %>

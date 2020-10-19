@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+	
+			<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark shadow">
+				<div class="container">
+					<a class="navbar-brand" href="/">
+						<img src="https://app.fiscoserenity.be/images/logo.png" width="30" height="30" alt="Popo Fisco Serenity">
+					</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+					</button>
+			
+			<ul class="navbar-nav collapse navbar-collapse justify-content-end" id="menu">
+				<li class="nav-item"> 
+        			<a class="nav-link" href="<%= fraispros_path %>">Frais Pro</a>
+				</li>
+				</div>
+			</nav>
+
+			<nav class="navbar justify-content-end sticky-top container">
+				<div style="text-align:right">
+					<br><br><br>
+					<a href="<%= new_fraispro_path %>" class="btn btn-primary float-sm-left shadow-lg"> Ajouter un frais</a>
+				</div>
+			</nav>
+
+
+ </head>
+<body>
+	<% flash.each do |type, msg| %>
+ 	<div class="alert alert-info container">
+    <%= msg %>
+  </div>
+<% end %>
+<div class="container"> 
+	 <%= yield %> </div>
+  </body>
+</html>

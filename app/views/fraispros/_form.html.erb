@@ -1,0 +1,67 @@
+<%= form_with(model: fraispro, local: true) do |form| %>
+  <% if fraispro.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(fraispro.errors.count, "error") %> prohibited this fraispro from being saved:</h2>
+
+      <ul>
+        <% fraispro.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :nature %>
+    <%= form.text_field :nature %>
+  </div>
+
+  <div class="field">
+    <%= form.label :facture %>
+    <%= form.text_field :facture %>
+  </div>
+
+  <div class="field">
+    <%= form.label :compte %>
+    <%= form.text_field :compte %>
+  </div>
+
+  <div class="field">
+    <%= form.label :bank %>
+    <%= form.text_field :bank %>
+  </div>
+
+  <div class="field">
+    <%= form.label :date %>
+    <%= form.date_select :date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :montant %>
+    <%= form.text_field :montant %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div class="field">
+    <%= form.label :deductibilite %>
+    <%= form.text_field :deductibilite %>
+  </div>
+
+  <div class="field">
+    <%= form.label :privepro %>
+    <%= form.text_field :privepro %>
+  </div>
+
+  <div class="field">
+    <%= form.label :total %>
+    <%= form.text_field :total %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

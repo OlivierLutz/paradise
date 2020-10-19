@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nature: MyString
+  facture: MyString
+  compte: MyString
+  bank: MyString
+  date: 2020-10-19
+  montant: 
+  description: MyText
+  deductibilite: 1.5
+  privepro: 1.5
+  total: 1.5
+
+two:
+  nature: MyString
+  facture: MyString
+  compte: MyString
+  bank: MyString
+  date: 2020-10-19
+  montant: 
+  description: MyText
+  deductibilite: 1.5
+  privepro: 1.5
+  total: 1.5

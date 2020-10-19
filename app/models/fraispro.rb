@@ -1,0 +1,2 @@
+class Fraispro < ApplicationRecord
+end
