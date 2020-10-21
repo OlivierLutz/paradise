@@ -1,11 +1,16 @@
-<h1>Vos Frais Pro</h1>
+<h1>Vos frais professionnels</h1>
+ <br>
+  <br>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
 
 <% x = 0 %>
 <% while x != 12%>
 <%x += 1%>
   <% count = 0 %>
+  <% a = 0 %>
   
   <% @fraispros.each do |f| %>
   <% if f.date.strftime("%m") == if x < 10 then "0"+x.to_s else x.to_s end %>
@@ -13,32 +18,48 @@
   <% end %>
   <% end %>
   <% if count != 0 %>
-  <h2><%= Date::MONTHNAMES[x]+" 2020" %></h2>
-  <table class="table table-striped">
+  <h2><p style="text-align:left;"><%= Date::MONTHNAMES[x]+" 2020" %>
+  <% @fraispros.each do |f| %>
+  <% if f.date.strftime("%m") == if x < 10 then "0"+x.to_s else x.to_s end %>
+  <% a += f.montant %>
+  <% end %>
+  <% end %>
+  <span style="float:right;"><%= number_to_currency(a, :unit => "€", locale: :fr) %></span></p></h2>
+  <table>
+    <colgroup>
+    <col class="quarante" />
+    <col class="cinq" />
+    <col class="cinq" />
+    <col class="dix" />
+    <col class="cinq" />
+    <col class="cinq" />
+    <col class="dix" />
+    <col class="vingt" />
+  </colgroup>
     <thead>
       <tr>
         <th scope="col">Description</th>
-        <th scope="col">Bank</th>
-        <th scope="col">Date</th>
-        <th scope="col">Total</th>
-        <th scope="col">% pro</th>
-        <th scope="col">% admis</th>
-        <th scope="col">Montant</th>
-        <th scope="col">Action</th>
+        <th scope="col"><span style="float:right;">Bank</span></th>
+        <th scope="col"><span style="float:right;">Date</span></th>
+        <th scope="col"><span style="float:right;">Total</span></th>
+        <th scope="col"><span style="float:right;">Pro</span></th>
+        <th scope="col"><span style="float:right;">Admis</span></th>
+        <th scope="col"><span style="float:right;">Déductible</span></th>
+        <th scope="col"><span style="float:right;">Action</span></th>
       </tr>
     </thead>
     <tbody>
     <% @fraispros.each do |f| %>
       <% if f.date.strftime("%m") == if x < 10 then "0"+x.to_s else x.to_s end %> 
       <tr>
-          <th scope="row"><%= f.description %></th>
-          <td><%= f.bank %></td>
-          <td><%= f.date %></td>
-          <td><%= f.total %></td>
-          <td><%= f.privepro %></td>
-          <td><%= f.deductibilite %></td>
-          <td><%= f.montant %></td>
-          <td>
+          <th><span style= "font-weight:normal"><%= f.description %></span></th>
+          <td><span style="float:right;"><%= f.bank %></span></td>
+          <td><span style="float:right;"><%= f.date.strftime("%d/%m") %></span></td>
+          <td><span style="float:right;"><%= number_to_currency(f.total, :unit => "€", locale: :fr, precision: 1 ) %></span></td>
+          <td><span style="float:right;"><%= number_to_percentage(f.privepro, precision:0) %></span></td>
+          <td><span style="float:right;"><%= number_to_percentage(f.deductibilite, precision:0) %></span></td>
+          <td><span style="float:right;"><%= number_to_currency(f.montant, :unit => "€", locale: :fr, precision: 1 ) %></span></td>
+          <td><span style="float:right;">
               <% if f.facture == nil %>
               <% else %>
                 <% if f.facture.include? "http" %>
@@ -50,12 +71,15 @@
                 <% end %>
               <% end %>
               <a href="<%= edit_fraispro_path(f.id) %>" class="btn btn-primary"> <i class="material-icons">edit</i></a>
+              <a href="<%= edit_fraispro_path(f.id) %>" class="btn btn-primary"> <i class="material-icons">edit</i></a>
               <a href="<%= fraispro_path(f.id)%>" class="btn btn-danger" data-method="DELETE"><i class="material-icons">delete</i></a>
+              </span>
           </td>
       </tr>
       <% end %>
     <%end%>
     </tbody>
   </table>
+  <br> <br>
   <% end %>
 <% end %>
