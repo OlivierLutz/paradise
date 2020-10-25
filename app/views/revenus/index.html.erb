@@ -1,5 +1,32 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <h1>Nouveau Revenu</h1>
 <br>
+<%= form_for @cacaNew do |f| %>
+<div class="form_group">
+        <%= f.label "Revenu Indépendant" %>
+        <%= f.number_field :revenuindep,  class:'form-control' %>
+</div>
+<div class="form_group">
+        <%= f.label "Revenu Salarié" %>
+        <%= f.number_field :salaire,  class:'form-control' %>
+</div><br>
+<div class="form_group">
+        <%= f.submit "Enregistrer", class: 'btn btn-primary' %>
+</div>
+<% end %>
+______________________________________________________________________________________________________________________________
 
-<%= @caca.inspect %>
+<br><br>
+<% @caca.each do |f| %>
+Revenu Indépendant: <%= f.revenuindep %><br>
+Revenu Salarié: <%= f.salaire %><br>
+Crée le: <%= f.created_at %><br>
+Mis à jour le: <%= f.updated_at %><br>
+<a href="<%= revenu_path(f.id)%>" class="btn btn-danger" data-method="DELETE"><i class="material-icons">delete</i></a>
+__________________
+<br><br>
+<% end %>
 
+
+ 
