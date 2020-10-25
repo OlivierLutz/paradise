@@ -1,0 +1,2 @@
+class Revenu < ApplicationRecord
+end

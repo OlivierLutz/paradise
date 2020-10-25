@@ -17,8 +17,12 @@ class FraisprosController < ApplicationController
     @fraispro = Fraispro.new
   end
 
-  # GET /fraispros/1/edit
+
   def edit
+  end
+  
+  def duplicate
+    @fraispro = Fraispro.find(params[:id]).dup
   end
 
   # POST /fraispros

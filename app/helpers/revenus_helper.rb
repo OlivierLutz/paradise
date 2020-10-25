@@ -1,0 +1,2 @@
+module RevenusHelper
+end

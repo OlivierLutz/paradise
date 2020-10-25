@@ -5,7 +5,6 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 
-
 <% x = 0 %>
 <% while x != 12%>
 <%x += 1%>
@@ -71,7 +70,7 @@
                 <% end %>
               <% end %>
               <a href="<%= edit_fraispro_path(f.id) %>" class="btn btn-primary"> <i class="material-icons">edit</i></a>
-              <a href="<%= edit_fraispro_path(f.id) %>" class="btn btn-primary"> <i class="material-icons">edit</i></a>
+              <a href="<%= duplicate_path(f.id) %>" class="btn btn-primary"> <i class="material-icons">control_point_duplicate</i></a>
               <a href="<%= fraispro_path(f.id)%>" class="btn btn-danger" data-method="DELETE"><i class="material-icons">delete</i></a>
               </span>
           </td>

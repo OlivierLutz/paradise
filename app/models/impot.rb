@@ -1,0 +1,3 @@
+class Impot < ApplicationRecord
+    
+end
