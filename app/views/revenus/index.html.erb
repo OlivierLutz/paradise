@@ -1,32 +1,66 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<h1>Nouveau Revenu</h1>
+<%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
+<h1>Vos revenus</h1>
 <br>
-<%= form_for @cacaNew do |f| %>
-<div class="form_group">
-        <%= f.label "Revenu Indépendant" %>
-        <%= f.number_field :revenuindep,  class:'form-control' %>
-</div>
-<div class="form_group">
-        <%= f.label "Revenu Salarié" %>
-        <%= f.number_field :salaire,  class:'form-control' %>
-</div><br>
-<div class="form_group">
-        <%= f.submit "Enregistrer", class: 'btn btn-primary' %>
-</div>
-<% end %>
-______________________________________________________________________________________________________________________________
 
-<br><br>
-<% @caca.each do |f| %>
-Revenu Indépendant: <%= f.revenuindep %><br>
-Revenu Salarié: <%= f.salaire %><br>
-Crée le: <%= f.created_at %><br>
-Mis à jour le: <%= f.updated_at %><br>
-<a href="<%= revenu_path(f.id)%>" class="btn btn-danger" data-method="DELETE"><i class="material-icons">delete</i></a>
-__________________
-<br><br>
-<% end %>
+
+
+<br>
+<% totalFPmois = [0,0,0,0,0,0,0,0,0,0,0,0,0] %>
+
+<% Fraispro.all.each do |f| %>
+         <% totalFPmois[f.date.strftime("%m").to_f] += f.montant %>
+ <% end %>
+<%= timeline [
+  ["Education Physique", "2009-09-23", "2015-06-31"],
+  ["Kinésithérapie", "2015-09-23", "2018-06-31"],
+  ["Code Learning", "2020-06-01", "2021-04-01"]
+] %>
+<%= area_chart @revenu.map { |revenu|
+    {name: revenu.mois, data: revenu}
+} %>
+
+
+<table>
+    <colgroup>
+    <col class="dix" />
+    <col class="trente" />
+    <col class="trente" />
+    <col class="trente" />
+  </colgroup>
+    <thead>
+      <tr style= "text-align: right; font-size:24px; font-weight: bold">
+        <th scope="col"><span style="float:right;">Mois</th>
+        <th scope="col"><span style="float:right;">Frais pro</span></th>
+        <th scope="col"><span style="float:right;">Recette Pro</span></th>
+        <th scope="col"><span style="float:right;">Salaire versé</span></th>
+      </tr>
+    </thead>
+    <tbody>
+        <% id = 1 %>
+        <% recetteProTot = 0 %>
+        <% salaireTot = 0 %>
+        <% @revenu.each do |f| %>
+        <% @revenu = Revenu.find(id) %>
+        <tr>
+            <td><span style= "float:right; font-size:18px; font-weight: bold"><%= f.mois %></span></td>
+            <td><span style= "float:right;"><%= number_to_currency(totalFPmois[id], :unit => "€", locale: :fr, precision:1) %></span></td>
+            <td><span style= "float:right;"><%= form_for @revenu do |f| %><%= f.number_field :revenuindep %><%= f.submit "OK" %><% end %></span></td>
+            <td><span style= "float:right;"><%= form_for @revenu do |f| %><%= f.number_field :salaire %><%= f.submit "OK" %><% end %></span></td>
+        </tr>
+        <% recetteProTot += f.revenuindep %>
+        <% salaireTot += f.salaire %>
+        <% id += 1 %>
+        <% end %>
+        <tr style= "text-align: right; font-size:24px; font-weight: bold">
+            <td>Total</td>
+            <td><%= number_to_currency(totalFPmois.sum, :unit => "€", locale: :fr, precision:0)%></td>
+            <td><%= number_to_currency(recetteProTot, :unit => "€", locale: :fr, precision:0)%></span></td>
+            <td><%= number_to_currency(salaireTot, :unit => "€", locale: :fr, precision:0)%></span></td>
+        </tr>
+</tbody>
+</table>
 
 
  

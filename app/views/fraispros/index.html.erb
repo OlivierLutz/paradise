@@ -3,8 +3,19 @@
   <br>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<% r = 0 %>
+<% @fraispros.each do |f| %>
+         <%r += f.date.strftime("%m").to_f %>
+<% end %>
+<%= r %>
 
+<% totalFPmois = [0,0,0,0,0,0,0,0,0,0,0,0,0] %>
 
+<% @fraispros.each do |f| %>
+         <% totalFPmois[f.date.strftime("%m").to_f] += f.montant %>
+ <% end %>
+<%= totalFPmois %>
+  
 <% x = 0 %>
 <% while x != 12%>
 <%x += 1%>
