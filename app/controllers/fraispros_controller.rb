@@ -32,8 +32,8 @@ class FraisprosController < ApplicationController
 
     respond_to do |format|
       if @fraispro.save
-        format.html { redirect_to @fraispro, notice: 'Fraispro was successfully created.' }
-        format.json { render :show, status: :created, location: @fraispro }
+        format.html { redirect_to fraispros_path, notice: "Tout s'est bien passé: frais créé." }
+        format.json { render :index, status: :created, location: @fraispro }
       else
         format.html { render :new }
         format.json { render json: @fraispro.errors, status: :unprocessable_entity }
@@ -46,8 +46,8 @@ class FraisprosController < ApplicationController
   def update
     respond_to do |format|
       if @fraispro.update(fraispro_params)
-        format.html { redirect_to @fraispro, notice: 'Fraispro was successfully updated.' }
-        format.json { render :show, status: :ok, location: @fraispro }
+        format.html { redirect_to fraispros_path, notice: 'Mise à jour faite avec succès !' }
+        format.json { render :index, status: :ok, location: @fraispro }
       else
         format.html { render :edit }
         format.json { render json: @fraispro.errors, status: :unprocessable_entity }
@@ -73,6 +73,6 @@ class FraisprosController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def fraispro_params
-      params.require(:fraispro).permit(:nature, :facture, :compte, :bank, :date, :montant, :description, :deductibilite, :privepro, :total)
+      params.require(:fraispro).permit(:nature,:user, :facture, :compte, :bank, :date, :montant, :description, :deductibilite, :privepro, :total)
     end
 end

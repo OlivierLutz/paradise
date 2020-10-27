@@ -7,14 +7,14 @@
 <% @fraispros.each do |f| %>
          <%r += f.date.strftime("%m").to_f %>
 <% end %>
-<%= r %>
 
 <% totalFPmois = [0,0,0,0,0,0,0,0,0,0,0,0,0] %>
 
 <% @fraispros.each do |f| %>
+  <% if f.user == current_user.email %>
          <% totalFPmois[f.date.strftime("%m").to_f] += f.montant %>
- <% end %>
-<%= totalFPmois %>
+  <% end %>       
+<% end %>
   
 <% x = 0 %>
 <% while x != 12%>
@@ -24,14 +24,18 @@
   
   <% @fraispros.each do |f| %>
   <% if f.date.strftime("%m") == if x < 10 then "0"+x.to_s else x.to_s end %>
+  <% if f.user == current_user.email %>
   <% count += 1%>
+  <% end %>
   <% end %>
   <% end %>
   <% if count != 0 %>
   <h2><p style="text-align:left;"><%= Date::MONTHNAMES[x]+" 2020" %>
   <% @fraispros.each do |f| %>
   <% if f.date.strftime("%m") == if x < 10 then "0"+x.to_s else x.to_s end %>
+  <% if f.user == current_user.email %>
   <% a += f.montant %>
+  <% end %>
   <% end %>
   <% end %>
   <span style="float:right;"><%= number_to_currency(a, :unit => "€", locale: :fr) %></span></p></h2>
@@ -61,6 +65,7 @@
     <tbody>
     <% @fraispros.each do |f| %>
       <% if f.date.strftime("%m") == if x < 10 then "0"+x.to_s else x.to_s end %> 
+      <% if f.user == current_user.email %>
       <tr>
           <th><span style= "font-weight:normal"><%= f.description %></span></th>
           <td><span style="float:right;"><%= f.bank %></span></td>
@@ -86,6 +91,7 @@
               </span>
           </td>
       </tr>
+      <% end %>
       <% end %>
     <%end%>
     </tbody>

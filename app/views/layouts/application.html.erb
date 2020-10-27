@@ -17,13 +17,16 @@
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 					</button>
-			
 			<ul class="navbar-nav collapse navbar-collapse justify-content-end" id="menu">
+			<% if current_user %>
 				<li class="nav-item"> 
         			<a class="nav-link" href="<%= fraispros_path %>">Frais Pro</a>
 				</li>
 				<li class="nav-item"> 
         			<a class="nav-link" href="<%= revenus_path %>">Revenus</a>
+				</li>
+				<li class="nav-item"> 
+        			<a class="nav-link" href="<%= logout_path %>"><i class="fas fa-sign-out-alt"></i></a>
 				</li>
 				</div>
 			</nav>
@@ -34,6 +37,10 @@
 					<a href="<%= new_fraispro_path %>" class="btn btn-primary float-sm-left shadow-lg"> Ajouter un frais</a>
 				</div>
 			</nav>
+			<% else %>
+			</nav>
+			<br><br><br>
+			<% end %>
 
 
  </head>

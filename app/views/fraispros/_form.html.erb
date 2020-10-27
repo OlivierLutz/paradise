@@ -10,7 +10,7 @@
       </ul>
     </div>
   <% end %>
-
+    <%= form.hidden_field :user, value:current_user.email %>
   <div class="field">
     <%= form.label :nature %>
     <%= form.text_field :nature %>
