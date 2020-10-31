@@ -1,7 +1,7 @@
 class RevenusController < ApplicationController
   include ActionView::Helpers::NumberHelper
   def index
-     @revenu = Revenu.all
+     @revenu = Revenu.all.order(:mois)
      @cacaNew = Revenu.new
   end
   
@@ -31,12 +31,11 @@ class RevenusController < ApplicationController
     @revenu.destroy
     redirect_to revenus_path, notice: 'Donnée supprimée' 
   end
-    
   
   private
   
   def revenu_params
-    params.require(:revenu).permit(:salaire, :revenuindep,:mois)
+    params.require(:revenu).permit(:salaire, :revenuindep,:mois,:user)
   end
   
 end

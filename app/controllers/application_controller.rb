@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
 
   def authenticate_user!
     unless current_user
-      redirect_to login_path, notice: 'Please login'
+      redirect_to login_path, notice: 'Merci de connecter pour accéder au contenu de ce site'
     end
   end
 

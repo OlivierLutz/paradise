@@ -2,11 +2,7 @@
  <br>
   <br>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<% r = 0 %>
-<% @fraispros.each do |f| %>
-         <%r += f.date.strftime("%m").to_f %>
-<% end %>
+
 
 <% totalFPmois = [0,0,0,0,0,0,0,0,0,0,0,0,0] %>
 
@@ -20,8 +16,6 @@
 <% while x != 12%>
 <%x += 1%>
   <% count = 0 %>
-  <% a = 0 %>
-  
   <% @fraispros.each do |f| %>
   <% if f.date.strftime("%m") == if x < 10 then "0"+x.to_s else x.to_s end %>
   <% if f.user == current_user.email %>
@@ -31,14 +25,7 @@
   <% end %>
   <% if count != 0 %>
   <h2><p style="text-align:left;"><%= Date::MONTHNAMES[x]+" 2020" %>
-  <% @fraispros.each do |f| %>
-  <% if f.date.strftime("%m") == if x < 10 then "0"+x.to_s else x.to_s end %>
-  <% if f.user == current_user.email %>
-  <% a += f.montant %>
-  <% end %>
-  <% end %>
-  <% end %>
-  <span style="float:right;"><%= number_to_currency(a, :unit => "€", locale: :fr) %></span></p></h2>
+  <span style="float:right;"><%= number_to_currency(totalFPmois[x], :unit => "€", locale: :fr) %></span></p></h2>
   <table>
     <colgroup>
     <col class="quarante" />
@@ -85,7 +72,7 @@
                 <a href="<%= "http://"+f.facture %>" class="btn btn-success"><i class="material-icons">description</i></a>
                 <% end %>
               <% end %>
-              <a href="<%= edit_fraispro_path(f.id) %>" class="btn btn-primary"> <i class="material-icons">edit</i></a>
+              <a href="<%= edit_fraispro_path(f.id) %>" class="btn btn-primary"> <i class="material-icons" class="font-size: 5px">edit</i></a>
               <a href="<%= duplicate_path(f.id) %>" class="btn btn-primary"> <i class="material-icons">control_point_duplicate</i></a>
               <a href="<%= fraispro_path(f.id)%>" class="btn btn-danger" data-method="DELETE"><i class="material-icons">delete</i></a>
               </span>
