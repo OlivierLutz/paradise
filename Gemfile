@@ -8,6 +8,8 @@ gem 'rails', '~> 6.0.3', '>= 6.0.3.4'
 # Use postgresql as the database for Active Record
 
 gem "chartkick"
+gem 'chart-js-rails'
+
 
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server

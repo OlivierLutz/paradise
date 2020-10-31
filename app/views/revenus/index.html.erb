@@ -19,20 +19,62 @@ end %>
 
 <br>
 <% totalFPmois = [0,0,0,0,0,0,0,0,0,0,0,0,0] %>
-
+<% revenuindepmois = [0,0,0,0,0,0,0,0,0,0,0,0,0] %>
+<% salairemois = [0,0,0,0,0,0,0,0,0,0,0,0,0] %>
 <% Fraispro.all.each do |f| %>
      <% if f.user == current_user.email %>
          <% totalFPmois[f.date.strftime("%m").to_f] += f.montant %>
  <% end %>
   <% end %>
-<%= timeline [
-  ["Education Physique", "2009-09-23", "2015-06-31"],
-  ["Kinésithérapie", "2015-09-23", "2018-06-31"],
-  ["Code Learning", "2020-06-01", "2021-04-01"]
-] %>
-<%= area_chart @revenu.map { |revenu|
-    {name: revenu.mois, data: revenu}
-} %>
+<% Revenu.all.order(:mois).each do |f| %>
+     <% if f.user == current_user.email %>
+         <% revenuindepmois[f.mois] += f.revenuindep %>
+ <% end %>
+  <% end %>
+<% Revenu.all.order(:mois).each do |f| %>
+     <% if f.user == current_user.email %>
+         <% salairemois[f.mois] += f.salaire %>
+ <% end %>
+  <% end %>
+
+<canvas id="myChart" width="300" height="100"></canvas>
+<script>
+var ctx = document.getElementById('myChart');
+Chart.defaults.global.defaultFontSize = 15;
+var fraispro = {
+            label: 'Frais pro',
+            data: <%= totalFPmois.drop(1) %>,
+            lineTension: 0, 
+            backgroundColor: ['rgba(255, 99, 132, 0)',],
+            borderColor: ['#f7786b',],
+            borderWidth: 7,};
+var salaire = {
+            label: 'Salaire',
+            data: <%= salairemois.drop(1) %>,
+            lineTension: 0, 
+            backgroundColor: ['rgba(1, 129, 193, 0)',],
+            borderColor: ['#80ced6',],
+            borderWidth: 7,};
+var Revenu = {
+            label: 'Revenu',
+            data: <%= revenuindepmois.drop(1) %>,
+            lineTension: 0, 
+            backgroundColor: ['rgba(1, 203, 1, 0)',],
+            borderColor: ['#0181c1',],
+            borderWidth: 7,};
+var graph = {
+    labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin','Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre',],
+  datasets: [fraispro, salaire, Revenu]
+};
+var chartOptions = {layout: {padding: {left: 80, right: 100, top: 20, bottom: 50}}}
+
+var barChart = new Chart(myChart, {
+  type: 'line',
+  data: graph,
+  options: chartOptions
+});
+
+</script>
 
 
 <table>
