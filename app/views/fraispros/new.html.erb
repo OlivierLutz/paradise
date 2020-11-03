@@ -1,50 +1,6 @@
 <h1>Nouveau frais professionel</h1>
 
-<%# Récupération des catégories %>
-<% souscategories = [] %>
-    <% Categ.all.each do |f| %>
-        <% if f.user == current_user.email %>
-            <% souscategories << f.souscat %>
-        <% end %>
-    <% end %>
-<%# Classement des sous-catégories ensemble et concatenation %>
-<% souscategories = souscategories.uniq %>
-<% grouped_options = [] %>
-<% grouped_options = souscategories %>
-<% grouped_options = grouped_options.permutation(1).to_a %>
-<% sousgroupe = [] %>
-<% x = 0 %>
-<% a = -1 %>
-    <% while x != (souscategories.size) %>
-        <% tmp = [] %>
-        <% a += 2 %>
-            <% Categ.all.each do |f| %>
-                <% if f.souscat == souscategories[x] %>
-                   <% tmp << f.nature %>
-                <% end %>
-            <% end %>
-        <% sousgroupe << tmp %>
-        <% x += 1 %>
-    <% end %>
-<%# Concatenation des Catégories et des sous-catégories pour avoir une array traitable par select et grouped_options_for_select!!! %>
-<% grouped_options = grouped_options.zip(sousgroupe) %>
+<%= render 'form', fraispro: @fraispro %>
+</br>
 
-
-<%= bootstrap_form_for(@fraispro) do |f| %>
-    <%= f.hidden_field :user, value: current_user.email %>
-    <%= f.text_field :facture %>
-    <%= f.text_field :bank %>
-    <%= f.text_field :privepro, label: "Pourcentage d'utilisation professionnel", append: "%" %>
-    <%= f.text_field :compte,  help: "Indiquez ici le type de compte utilisé pour la transaction (par exemple pro ou privé)" %>
-    <%= f.number_field :montant, append: "€", label: "Prix d'achat" %>
-    <div role="wrapper" class="gj-datepicker gj-datepicker-bootstrap gj-unselectable input-group">
-    <%= f.date_select :date, class:"form-control datepicker" %>
-    </div>
-    <%= f.select :nature, grouped_options_for_select(grouped_options) %>  
-    <%= f.text_field :total %>
-    <%= f.text_field :description, help: "Indiquez ici plus de détails ou une éventuelle justification du frais pour vous en rappelez en cas de contrôle" %>
-    </br>
-    <%= f.submit "Enregistrer", class: 'btn btn-primary' %>
-<% end %>
-
-<%= link_to 'Back', fraispros_path %></br>
+<a href="<%= fraispros_path%>" class="btn btn-danger"><i class="material-icons">arrow_back</i> Retour</a>

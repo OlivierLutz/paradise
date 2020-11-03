@@ -64,9 +64,9 @@ class FraisprosController < ApplicationController
   def destroy
     @fraispro.destroy
     respond_to do |format|
-      format.html { redirect_to fraispros_url, notice: 'Fraispro was successfully destroyed.' }
+      format.html { redirect_to fraispros_categ_path, notice: 'Le frais a été détruit avec succès' }
       format.json { head :no_content }
-    end
+      end
   end
 
   private

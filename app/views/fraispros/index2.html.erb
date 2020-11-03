@@ -6,28 +6,33 @@
 <br>
 
 
-<% totalFPmois = [0,0,0,0,0,0,0,0,0,0,0,0,0] %>
+<% categories = [] %>
 
-<% @fraispros.each do |f| %>
-  <% if f.user == current_user.email %>
-         <% totalFPmois[f.date.strftime("%m").to_f] += f.montant %>
-  <% end %>       
-<% end %>
+  <% Fraispro.all.each do |f| %>
+    <% if f.user == current_user.email %>
+      <% categories << f.nature %>
+    <% end %>
+  <% end %>
   
-<% x = 0 %>
-<% while x != 12%>
-<%x += 1%>
-  <% count = 0 %>
-  <% @fraispros.each do |f| %>
-  <% if f.date.strftime("%m") == if x < 10 then "0"+x.to_s else x.to_s end %>
-  <% if f.user == current_user.email %>
-  <% count += 1%>
+<% categories = categories.uniq %>
+<% categoriestot = Array.new(categories.size, 0) %>
+
+<% n = 0 %>
+<% while n != categories.size %>
+  <% Fraispro.all.each do |f| %>
+    <% if f.user == current_user.email %>
+    <% if f.nature == categories[n] %>
+        <% categoriestot[n] += f.montant %>
+    <% end %>
+    <% end %> 
   <% end %>
-  <% end %>
-  <% end %>
-  <% if count != 0 %>
-  <h2><p style="text-align:left;"><%= Date::MONTHNAMES[x]+" 2020" %>
-  <span style="float:right;"><%= number_to_currency(totalFPmois[x], :unit => "€", locale: :fr) %></span></p></h2>
+<% n += 1 %>
+<% end %>
+
+<% n = 0 %>
+<% while n != categories.size %>
+  <h3><p style="text-align:left;"><%= categories[n] %>
+  <span style="float:right;"><%= number_to_currency(categoriestot[n], :unit => "€", locale: :fr) %></span></p></h3>
   <table>
     <colgroup>
     <col class="quarante" />
@@ -53,8 +58,8 @@
     </thead>
     <tbody>
     <% @fraispros.each do |f| %>
-      <% if f.date.strftime("%m") == if x < 10 then "0"+x.to_s else x.to_s end %> 
       <% if f.user == current_user.email %>
+      <% if f.nature == categories[n] %>
       <tr>
           <th><span style= "font-weight:normal"><%= f.nature %> <%= f.description %></span></th>
           <td><span style="float:right;"><%= f.bank %></span></td>
@@ -86,5 +91,5 @@
     </tbody>
   </table>
   <br> <br>
-  <% end %>
+<% n += 1 %>
 <% end %>
