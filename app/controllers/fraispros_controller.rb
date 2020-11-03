@@ -6,6 +6,10 @@ class FraisprosController < ApplicationController
   def index
     @fraispros = Fraispro.all
   end
+  
+  def index2
+    @fraispros = Fraispro.all
+  end
 
   # GET /fraispros/1
   # GET /fraispros/1.json

@@ -1,0 +1,52 @@
+<h1>Vos catégories de frais professionnels</h1><br>
+<div style="text-align:right">
+	<a href="<%= new_categ_path %>" class="btn btn-primary">Ajouter une catégorie</a>
+</div>
+
+<% souscategories = [] %>
+  <% Categ.all.each do |f| %>
+    <% if f.user == current_user.email %>
+      <% souscategories << f.souscat %>
+    <% end %>
+  <% end %>
+
+
+<% n = 0 %>
+<% while n != souscategories.uniq.size %>
+  <h3><p style="text-align:left;"><%= souscategories.uniq[n] %></p></h3>
+  <table>
+    <colgroup>
+      <col class="septante" />
+      <col class="dix" />
+      <col class="vingt" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th scope="col">Nature</th>
+        <th scope="col"><span style="float:right;">Déductibilité</span></th>
+        <th scope="col"><span style="float:right;">Action</span></th>
+      </tr>
+    </thead>
+    <tbody>
+    <% Categ.all.each do |f| %>
+      <% if f.user == current_user.email %>
+      <% if f.souscat == souscategories.uniq[n] %>
+      <tr>
+        <td><span style="float:left;"><%= f.nature %></span></td>
+        <td><span style="float:right;"><%= f.deductibilite %></span></td>
+        <td><span style="float:right;">
+          <a href="<%= edit_categ_path(f.id) %>" class="btn btn-primary"> <i class="material-icons" class="font-size: 5px">edit</i></a>
+          <a href="<%= categ_path(f.id)%>" class="btn btn-danger" data-method="DELETE"><i class="material-icons">delete</i></a>
+        </span></td>
+      </tr>
+
+      <% end %>
+      <% end %>
+    <% end %>
+    </tbody>
+  </table><br>
+  <% n += 1 %>
+<% end %>
+<br>
+<br>
+  

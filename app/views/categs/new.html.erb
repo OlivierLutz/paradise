@@ -1,0 +1,23 @@
+<h1>Nouvelle catégorie professionelle</h1>
+
+<%# Récupération des catégories %>
+<% souscategories = [] %>
+    <% Categ.all.each do |f| %>
+        <% if f.user == current_user.email %>
+            <% souscategories << f.souscat %>
+        <% end %>
+    <% end %>
+<% grouped_options = souscategories.uniq %>
+
+
+<%= bootstrap_form_for(@categ) do |f| %>
+    <%= f.hidden_field :user, value: current_user.email %>
+    <%= f.text_field :nature, label: "Catégorie" %>
+    <%= f.select :souscat, options_for_select(grouped_options), label: "Catégorie mère" %>
+    <%= f.number_field :deductibilite, append: "%", label: "Déductibilité légale maximum", help: "Ne pas confondre avec la part privée et professionnelle qui elle est indiquée lors de l'encodage de chaque frais professionnel" %>
+    </br>
+    <%= f.submit "Enregistrer", class: 'btn btn-primary' %>
+<% end %>
+</br>
+
+<a href="<%= categs_path%>" class="btn btn-danger"><i class="material-icons">arrow_back</i> Retour</a>

@@ -1,7 +1,7 @@
 <%= form_with(model: fraispro, local: true) do |form| %>
   <% if fraispro.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(fraispro.errors.count, "error") %> prohibited this fraispro from being saved:</h2>
+      <h2><%= pluralize(fraispro.errors.count, "erreur(s)") %> empêchent les données d'être sauvegardées:</h2>
 
       <ul>
         <% fraispro.errors.full_messages.each do |message| %>
@@ -10,58 +10,154 @@
       </ul>
     </div>
   <% end %>
+
+<% if Categ.find_by_user(current_user.email) == nil then %>
+<% p = Categ.new ; p.nature = "Loyer/Rétrocession Cabinet" ; p.user = current_user.email ; p.souscat = "-- LOCAUX PROFESSIONNELS --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Produits d'entretiens et consommables alimentaires (café,...)" ; p.user = current_user.email ; p.souscat = "-- LOCAUX PROFESSIONNELS --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Frais de construct./transfo./aménagement/Répa - Local PRO" ; p.user = current_user.email ; p.souscat = "-- LOCAUX PROFESSIONNELS --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Frais mensuels/annuels Bureau/cab Pro" ; p.user = current_user.email ; p.souscat = "-- LOCAUX PROFESSIONNELS --" ; p.deductibilite = 100 ; p.save  %>
+
+<% p = Categ.new ; p.nature = "Frais de véhicule" ; p.user = current_user.email ; p.souscat = "-- VEHICULES --" ; p.deductibilite = 52.5 ; p.save  %>
+<% p = Categ.new ; p.nature = "Carburant" ; p.user = current_user.email ; p.souscat = "-- VEHICULES --" ; p.deductibilite = 52.5 ; p.save  %>
+<% p = Categ.new ; p.nature = "Frais à 100% - Parking, GPS, Kit Main Libre, Intérêt,... (cfr. remarque)" ; p.user = current_user.email ; p.souscat = "-- VEHICULES --" ; p.deductibilite = 100 ; p.save  %>
+
+<% p = Categ.new ; p.nature = "Frais de transport: Péage, Avion, Traims, trams, Taxis, location, etc." ; p.user = current_user.email ; p.souscat = "-- FORMATION ET DEPLACEMENT --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Taxis et voiture de location" ; p.user = current_user.email ; p.souscat = "-- FORMATION ET DEPLACEMENT --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Frais de formation" ; p.user = current_user.email ; p.souscat = "-- FORMATION ET DEPLACEMENT --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Hébergement" ; p.user = current_user.email ; p.souscat = "-- FORMATION ET DEPLACEMENT --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Nourriture durant formation" ; p.user = current_user.email ; p.souscat = "-- FORMATION ET DEPLACEMENT --" ; p.deductibilite = 69 ; p.save  %>
+
+<% p = Categ.new ; p.nature = "Téléphonie professionnel" ; p.user = current_user.email ; p.souscat = "-- FRAIS DE BUREAU, PUBLICITE, RESTAURANT --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Ordinateur professionnel" ; p.user = current_user.email ; p.souscat = "-- FRAIS DE BUREAU, PUBLICITE, RESTAURANT --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Frais de bureau/cabinet" ; p.user = current_user.email ; p.souscat = "-- FRAIS DE BUREAU, PUBLICITE, RESTAURANT --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Publicité/Site Web" ; p.user = current_user.email ; p.souscat = "-- FRAIS DE BUREAU, PUBLICITE, RESTAURANT --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Petit matériel non amorti / entretiens / réparation" ; p.user = current_user.email ; p.souscat = "-- FRAIS DE BUREAU, PUBLICITE, RESTAURANT --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Logiciel informatique" ; p.user = current_user.email ; p.souscat = "-- FRAIS DE BUREAU, PUBLICITE, RESTAURANT --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Livres, publication scientifique, abonnement,..." ; p.user = current_user.email ; p.souscat = "-- FRAIS DE BUREAU, PUBLICITE, RESTAURANT --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Repas dans le cadre d'une journée pro" ; p.user = current_user.email ; p.souscat = "-- FRAIS DE BUREAU, PUBLICITE, RESTAURANT --" ; p.deductibilite = 69 ; p.save  %>
+<% p = Categ.new ; p.nature = "Frais de représentation, restaurants" ; p.user = current_user.email ; p.souscat = "-- FRAIS DE BUREAU, PUBLICITE, RESTAURANT --" ; p.deductibilite = 69 ; p.save  %>
+<% p = Categ.new ; p.nature = "Cadeaux d'affaires" ; p.user = current_user.email ; p.souscat = "-- FRAIS DE BUREAU, PUBLICITE, RESTAURANT --" ; p.deductibilite = 50 ; p.save  %>
+
+<% p = Categ.new ; p.nature = "Responsabilité civile et Protection juridique" ; p.user = current_user.email ; p.souscat = "-- ASSURANCES ET COTISATIONS SOCIALES --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Assurance Revenu Garanti (Maladie/Invalidité...)" ; p.user = current_user.email ; p.souscat = "-- ASSURANCES ET COTISATIONS SOCIALES --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Cotisations sociales personnelles (Acerta, Xerius, Partena, ...)" ; p.user = current_user.email ; p.souscat = "-- ASSURANCES ET COTISATIONS SOCIALES --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Cotisation de retraite complémentaire indépendant (PLCI)" ; p.user = current_user.email ; p.souscat = "-- ASSURANCES ET COTISATIONS SOCIALES --" ; p.deductibilite = 60 ; p.save  %>
+
+<% p = Categ.new ; p.nature = "Frais financiers (carte de crédit, compte pro, intérêt pro,...)" ; p.user = current_user.email ; p.souscat = "-- FRAIS DIVERS --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Frais de vêtements profesionnels" ; p.user = current_user.email ; p.souscat = "-- FRAIS DIVERS --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Ristournes accordées aux clients" ; p.user = current_user.email ; p.souscat = "-- FRAIS DIVERS --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Défense professionnelle" ; p.user = current_user.email ; p.souscat = "-- FRAIS DIVERS --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Honoraire d'un conseiller fiscal, assistance juridique, etc." ; p.user = current_user.email ; p.souscat = "-- FRAIS DIVERS --" ; p.deductibilite = 100 ; p.save  %>
+
+<% p = Categ.new ; p.nature = "Matériel et mobilier - Amorti" ; p.user = current_user.email ; p.souscat = "-- AMORTISSEMENTS --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Logiciel spécifique - Amorti" ; p.user = current_user.email ; p.souscat = "-- AMORTISSEMENTS --" ; p.deductibilite = 100 ; p.save  %>
+<% p = Categ.new ; p.nature = "Voitures - Amorti" ; p.user = current_user.email ; p.souscat = "-- AMORTISSEMENTS --" ; p.deductibilite = 52.5 ; p.save  %>
+<% p = Categ.new ; p.nature = "Immeubles - Amorti" ; p.user = current_user.email ; p.souscat = "-- AMORTISSEMENTS --" ; p.deductibilite = 20 ; p.save  %>
+<% p = Categ.new ; p.nature = "Autres frais - Amorti" ; p.user = current_user.email ; p.souscat = "-- AMORTISSEMENTS --" ; p.deductibilite = 100 ; p.save  %>
+<% end %>	
+
+	<div class="form-horizontal">
+		<div class="form-group col-md-6 col-xl-4">
     <%= form.hidden_field :user, value:current_user.email %>
-  <div class="field">
+ 
     <%= form.label :nature %>
+    <%= form.text_field :nature, value:Categ %>
     <%= form.text_field :nature %>
   </div>
 
   <div class="field">
     <%= form.label :facture %>
-    <%= form.text_field :facture %>
+    <%= form.text_field :facture, class: 'form-control' %>
   </div>
 
   <div class="field">
     <%= form.label :compte %>
-    <%= form.text_field :compte %>
+    <%= form.text_field :compte, class: 'form-control' %>
   </div>
 
   <div class="field">
     <%= form.label :bank %>
-    <%= form.text_field :bank %>
+    <%= form.text_field :bank, class: 'form-control' %>
   </div>
 
   <div class="field">
     <%= form.label :date %>
-    <%= form.date_select :date %>
+    <%= form.date_select :date, class: 'form-control' %>
   </div>
 
   <div class="field">
     <%= form.label :montant %>
-    <%= form.text_field :montant %>
+    <%= form.text_field :montant, class: 'form-control' %>
   </div>
 
   <div class="field">
     <%= form.label :description %>
-    <%= form.text_area :description %>
+    <%= form.text_area :description, class: 'form-control' %>
   </div>
 
   <div class="field">
     <%= form.label :deductibilite %>
-    <%= form.text_field :deductibilite %>
+    <%= form.text_field :deductibilite, class: 'form-control' %>
   </div>
 
   <div class="field">
     <%= form.label :privepro %>
-    <%= form.text_field :privepro %>
+    <%= form.text_field :privepro, class: 'form-control' %>
   </div>
 
   <div class="field">
     <%= form.label :total %>
-    <%= form.text_field :total %>
+    <%= form.text_field :total, class: 'form-control' %>
   </div>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit "Enregistrer", class: 'btn btn-primary' %>
   </div>
 <% end %>
+
+
+
+	
+</a>
+<div class="chosen-drop">
+  <div class="chosen-search">
+    <input class="chosen-search-input" type="text" autocomplete="off">
+  </div>
+  <ul class="chosen-results"></ul>
+</div></div>
+		</div>
+		<div class="form-group col-md-6 col-xl-4">
+			<label for="date">Date facture</label>
+			<div role="wrapper" class="gj-datepicker gj-datepicker-bootstrap gj-unselectable input-group"><input type="text" class="form-control datepicker" name="date" value="31-10-2020" id="date" placeholder="25-02-2020" required="" data-type="datepicker" data-guid="892a2150-93f4-246f-9caa-73ad90eecfc4" data-datepicker="true" role="input" day="2020-9-31"><span class="input-group-append" role="right-icon"><button class="btn btn-outline-secondary border-left-0" type="button"><i class="far fa-calendar" aria-hidden="true"></i></button></span></div>
+		</div>
+		<div class="form-group col-md-6 col-xl-4">
+			<label for="montant">Montant</label>
+			<div class="input-group mb-2">
+				<input type="number" step="0.01" class="form-control" id="montant" value="" name="montant" required="">
+				<div class="input-group-append">
+					<div class="input-group-text">€</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group col-md-12">
+			<label for="description">Description</label>
+			<textarea name="description" id="description" class="form-control"></textarea>
+		</div>
+		<div class="form-group col-md-6">
+			<label for="decuction">Déductibilité</label>
+			<div class="input-group mb-2">
+				<input type="text" class="form-control" id="decuction" readonly="">
+				<div class="input-group-append">
+					<div class="input-group-text">€</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group col-md-6">
+			<label for="calcul">&nbsp;</label>
+			<div class="input-group mb-2">
+				<button type="submit" class="btn btn-primary w-100">Enregister</button>
+									<input type="hidden" id="notification" value="true">
+							</div>
+		</div>
+	</div>
+</form>

@@ -7,6 +7,7 @@ ruby '2.7.2'
 gem 'rails', '~> 6.0.3', '>= 6.0.3.4'
 # Use postgresql as the database for Active Record
 
+
 gem "chartkick"
 gem 'chart-js-rails'
 
@@ -17,6 +18,11 @@ gem 'puma', '~> 4.1'
 # Use SCSS for stylesheets
 gem 'bootstrap', '~> 5.0.0.alpha1'
 gem 'sass-rails', '>= 6'
+
+gem "bootstrap_form", "~> 4.0"
+gem 'simple_form'
+
+
 gem 'bootstrap-sass'
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker', '~> 4.0'

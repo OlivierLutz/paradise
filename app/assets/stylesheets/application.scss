@@ -1,4 +1,6 @@
 @import "bootstrap";
+@import "rails_bootstrap_forms";
+
 
 body {
   background-color: #f4f4f4;
@@ -60,4 +62,8 @@ tr {
 
 .quarante {
   width: 40%;
+}
+
+.septante {
+  width: 70%;
 }
