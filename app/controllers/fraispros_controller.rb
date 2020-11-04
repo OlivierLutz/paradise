@@ -8,7 +8,7 @@ class FraisprosController < ApplicationController
   end
   
   def index2
-    @fraispros = Fraispro.all
+    @fraispro = Fraispro.all
   end
 
   # GET /fraispros/1
@@ -28,6 +28,19 @@ class FraisprosController < ApplicationController
   def duplicate
     @fraispro = Fraispro.find(params[:id]).dup
   end
+
+  def mois
+  p = Param.find_by_user(current_user.email)
+  p.trifraispro = "mois"
+  p.save
+  end
+  
+  def categorie
+  p = Param.find_by_user(current_user.email)
+  p.trifraispro = "categorie"
+  p.save
+  end
+
 
   # POST /fraispros
   # POST /fraispros.json
@@ -64,7 +77,7 @@ class FraisprosController < ApplicationController
   def destroy
     @fraispro.destroy
     respond_to do |format|
-      format.html { redirect_to fraispros_categ_path, notice: 'Le frais a été détruit avec succès' }
+      format.html { redirect_to fraispros_path, notice: 'Le frais a été détruit avec succès' }
       format.json { head :no_content }
       end
   end

@@ -16,8 +16,11 @@ Rails.application.routes.draw do
   get 'duplicate/:id', to: 'fraispros#duplicate', as: 'duplicate'
   resources :revenus
   get "fraispros-categ", to: "fraispros#index2", as: 'fraispros_categ'
+  
+
   resources :fraispros
   resources :categs
+  resources :params
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
 

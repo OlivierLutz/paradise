@@ -1,89 +1,195 @@
 <h1>Vos frais professionnels</h1>
  <br>
-<div style="text-align:left">
-	<a href="<%= fraispros_categ_path %>" class="btn btn-primary">Par catégorie</a>
-</div>
-<br>
 
-<% totalFPmois = [0,0,0,0,0,0,0,0,0,0,0,0,0] %>
 
-<% @fraispros.each do |f| %>
-  <% if f.user == current_user.email %>
-         <% totalFPmois[f.date.strftime("%m").to_f] += f.montant %>
-  <% end %>       
+ 
+      
+<% if Param.find_by(user: current_user.email, trifraispro: "mois").present? %>
+
+<%= bootstrap_form_for(Param.find_by_user(current_user.email)) do |f| %>
+  <%= f.hidden_field :trifraispro, value: "categorie" %>
+  <%= f.submit "Par catégorie", class: 'btn btn-primary' %>
 <% end %>
-  
-<% x = 0 %>
-<% while x != 12%>
-<%x += 1%>
-  <% count = 0 %>
-  <% @fraispros.each do |f| %>
-  <% if f.date.strftime("%m") == if x < 10 then "0"+x.to_s else x.to_s end %>
-  <% if f.user == current_user.email %>
-  <% count += 1%>
-  <% end %>
-  <% end %>
-  <% end %>
-  <% if count != 0 %>
-  <h2><p style="text-align:left;"><%= Date::MONTHNAMES[x]+" 2020" %>
-  <span style="float:right;"><%= number_to_currency(totalFPmois[x], :unit => "€", locale: :fr) %></span></p></h2>
-  <table>
-    <colgroup>
-    <col class="quarante" />
-    <col class="cinq" />
-    <col class="cinq" />
-    <col class="dix" />
-    <col class="cinq" />
-    <col class="cinq" />
-    <col class="dix" />
-    <col class="vingt" />
-  </colgroup>
-    <thead>
-      <tr>
-        <th scope="col">Description</th>
-        <th scope="col"><span style="float:right;">Bank</span></th>
-        <th scope="col"><span style="float:right;">Date</span></th>
-        <th scope="col"><span style="float:right;">Total</span></th>
-        <th scope="col"><span style="float:right;">Pro</span></th>
-        <th scope="col"><span style="float:right;">Admis</span></th>
-        <th scope="col"><span style="float:right;">Déductible</span></th>
-        <th scope="col"><span style="float:right;">Action</span></th>
-      </tr>
-    </thead>
-    <tbody>
-    <% @fraispros.each do |f| %>
-      <% if f.date.strftime("%m") == if x < 10 then "0"+x.to_s else x.to_s end %> 
-      <% if f.user == current_user.email %>
-      <tr>
-          <th><span style= "font-weight:normal"><%= f.nature %> <%= f.description %></span></th>
-          <td><span style="float:right;"><%= f.bank %></span></td>
-          <td><span style="float:right;"><%= f.date.strftime("%d/%m") %></span></td>
-          <td><span style="float:right;"><%= number_to_currency(f.total, :unit => "€", locale: :fr, precision: 1 ) %></span></td>
-          <td><span style="float:right;"><%= number_to_percentage(f.privepro, precision:0) %></span></td>
-          <td><span style="float:right;"><%= number_to_percentage(f.deductibilite, precision:0) %></span></td>
-          <td><span style="float:right;"><%= number_to_currency(f.montant, :unit => "€", locale: :fr, precision: 1 ) %></span></td>
-          <td><span style="float:right;">
-              <% if f.facture == nil %>
-              <% else %>
-                <% if f.facture.include? "http" %>
-                <a href="<%= f.facture %>" class="btn btn-success"><i class="material-icons">description</i></a>
-                <% elsif f.facture.include? "www" %>
-                <a href="<%= "http://"+f.facture %>" class="btn btn-success"><i class="material-icons">description</i></a>
-                <% elsif f.facture.include? "." %>
-                <a href="<%= "http://"+f.facture %>" class="btn btn-success"><i class="material-icons">description</i></a>
-                <% end %>
-              <% end %>
-              <a href="<%= edit_fraispro_path(f.id) %>" class="btn btn-primary"> <i class="material-icons" class="font-size: 5px">edit</i></a>
-              <a href="<%= duplicate_path(f.id) %>" class="btn btn-primary"> <i class="material-icons">control_point_duplicate</i></a>
-              <a href="<%= fraispro_path(f.id)%>" class="btn btn-danger" data-method="DELETE"><i class="material-icons">delete</i></a>
-              </span>
-          </td>
-      </tr>
+
+      <br>  <br>
+
+      <% totalFPmois = [0,0,0,0,0,0,0,0,0,0,0,0,0] %>
+      
+      <% @fraispros.each do |f| %>
+        <% if f.user == current_user.email %>
+               <% totalFPmois[f.date.strftime("%m").to_f] += f.montant %>
+        <% end %>       
       <% end %>
+        
+      <% x = 0 %>
+      <% while x != 12%>
+      <%x += 1%>
+        <% count = 0 %>
+        <% @fraispros.each do |f| %>
+        <% if f.date.strftime("%m") == if x < 10 then "0"+x.to_s else x.to_s end %>
+        <% if f.user == current_user.email %>
+        <% count += 1%>
+        <% end %>
+        <% end %>
+        <% end %>
+        <% if count != 0 %>
+        <h3><p style="text-align:left;"><%= Date::MONTHNAMES[x]+" 2020" %>
+        <span style="float:right;"><%= number_to_currency(totalFPmois[x], :unit => "€", locale: :fr) %></span></p></h3>
+        <table>
+          <colgroup>
+          <col class="quarante" />
+          <col class="cinq" />
+          <col class="cinq" />
+          <col class="dix" />
+          <col class="cinq" />
+          <col class="cinq" />
+          <col class="dix" />
+          <col class="vingt" />
+        </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">Description</th>
+              <th scope="col"><span style="float:right;">Bank</span></th>
+              <th scope="col"><span style="float:right;">Date</span></th>
+              <th scope="col"><span style="float:right;">Total</span></th>
+              <th scope="col"><span style="float:right;">Pro</span></th>
+              <th scope="col"><span style="float:right;">Admis</span></th>
+              <th scope="col"><span style="float:right;">Déductible</span></th>
+              <th scope="col"><span style="float:right;">Action</span></th>
+            </tr>
+          </thead>
+          <tbody>
+          <% @fraispros.each do |f| %>
+            <% if f.date.strftime("%m") == if x < 10 then "0"+x.to_s else x.to_s end %> 
+            <% if f.user == current_user.email %>
+            <tr>
+                <th><span style= "font-weight:normal"><%= f.nature %> <%= f.description %></span></th>
+                <td><span style="float:right;"><%= f.bank %></span></td>
+                <td><span style="float:right;"><%= f.date.strftime("%d/%m") %></span></td>
+                <td><span style="float:right;"><%= number_to_currency(f.total, :unit => "€", locale: :fr, precision: 1 ) %></span></td>
+                <td><span style="float:right;"><%= number_to_percentage(f.privepro, precision:0) %></span></td>
+                <td><span style="float:right;"><%= number_to_percentage(f.deductibilite, precision:0) %></span></td>
+                <td><span style="float:right;"><%= number_to_currency(f.montant, :unit => "€", locale: :fr, precision: 1 ) %></span></td>
+                <td><span style="float:right;">
+                    <% if f.facture == nil %>
+                    <% else %>
+                      <% if f.facture.include? "http" %>
+                      <a href="<%= f.facture %>" class="btn btn-success"><i class="material-icons">description</i></a>
+                      <% elsif f.facture.include? "www" %>
+                      <a href="<%= "http://"+f.facture %>" class="btn btn-success"><i class="material-icons">description</i></a>
+                      <% elsif f.facture.include? "." %>
+                      <a href="<%= "http://"+f.facture %>" class="btn btn-success"><i class="material-icons">description</i></a>
+                      <% end %>
+                    <% end %>
+                    <a href="<%= edit_fraispro_path(f.id) %>" class="btn btn-primary"> <i class="material-icons" class="font-size: 5px">edit</i></a>
+                    <a href="<%= duplicate_path(f.id) %>" class="btn btn-primary"> <i class="material-icons">control_point_duplicate</i></a>
+                    <a href="<%= fraispro_path(f.id)%>" class="btn btn-danger" data-method="DELETE"><i class="material-icons">delete</i></a>
+                    </span>
+                </td>
+            </tr>
+            <% end %>
+            <% end %>
+          <%end%>
+          </tbody>
+        </table>
+        <br> <br>
+        <% end %>
       <% end %>
-    <%end%>
-    </tbody>
-  </table>
-  <br> <br>
-  <% end %>
+
+<% elsif Param.find_by(user: current_user.email, trifraispro: "categorie").present? %>
+
+<%= bootstrap_form_for(Param.find_by_user(current_user.email)) do |f| %>
+  <%= f.hidden_field :trifraispro, value: "mois" %>
+  <%= f.submit "Par mois", class: 'btn btn-primary' %>
+<% end %>
+
+      <br>  <br>
+
+      <% categories = [] %>
+      
+        <% Fraispro.all.each do |f| %>
+          <% if f.user == current_user.email %>
+            <% categories << f.nature %>
+          <% end %>
+        <% end %>
+        
+      <% categories = categories.uniq %>
+      <% categoriestot = Array.new(categories.size, 0) %>
+      
+      <% n = 0 %>
+      <% while n != categories.size %>
+        <% Fraispro.all.each do |f| %>
+          <% if f.user == current_user.email %>
+          <% if f.nature == categories[n] %>
+              <% categoriestot[n] += f.montant %>
+          <% end %>
+          <% end %> 
+        <% end %>
+      <% n += 1 %>
+      <% end %>
+      
+      <% n = 0 %>
+      <% while n != categories.size %>
+        <h3><p style="text-align:left;"><%= categories[n] %>
+        <span style="float:right;"><%= number_to_currency(categoriestot[n], :unit => "€", locale: :fr) %></span></p></h3>
+        <table>
+          <colgroup>
+          <col class="quarante" />
+          <col class="cinq" />
+          <col class="cinq" />
+          <col class="dix" />
+          <col class="cinq" />
+          <col class="cinq" />
+          <col class="dix" />
+          <col class="vingt" />
+        </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">Description</th>
+              <th scope="col"><span style="float:right;">Bank</span></th>
+              <th scope="col"><span style="float:right;">Date</span></th>
+              <th scope="col"><span style="float:right;">Total</span></th>
+              <th scope="col"><span style="float:right;">Pro</span></th>
+              <th scope="col"><span style="float:right;">Admis</span></th>
+              <th scope="col"><span style="float:right;">Déductible</span></th>
+              <th scope="col"><span style="float:right;">Action</span></th>
+            </tr>
+          </thead>
+          <tbody>
+          <% @fraispros.each do |f| %>
+            <% if f.user == current_user.email %>
+            <% if f.nature == categories[n] %>
+            <tr>
+                <th><span style= "font-weight:normal"><%= f.nature %> <%= f.description %></span></th>
+                <td><span style="float:right;"><%= f.bank %></span></td>
+                <td><span style="float:right;"><%= f.date.strftime("%d/%m") %></span></td>
+                <td><span style="float:right;"><%= number_to_currency(f.total, :unit => "€", locale: :fr, precision: 1 ) %></span></td>
+                <td><span style="float:right;"><%= number_to_percentage(f.privepro, precision:0) %></span></td>
+                <td><span style="float:right;"><%= number_to_percentage(f.deductibilite, precision:0) %></span></td>
+                <td><span style="float:right;"><%= number_to_currency(f.montant, :unit => "€", locale: :fr, precision: 1 ) %></span></td>
+                <td><span style="float:right;">
+                    <% if f.facture == nil %>
+                    <% else %>
+                      <% if f.facture.include? "http" %>
+                      <a href="<%= f.facture %>" class="btn btn-success"><i class="material-icons">description</i></a>
+                      <% elsif f.facture.include? "www" %>
+                      <a href="<%= "http://"+f.facture %>" class="btn btn-success"><i class="material-icons">description</i></a>
+                      <% elsif f.facture.include? "." %>
+                      <a href="<%= "http://"+f.facture %>" class="btn btn-success"><i class="material-icons">description</i></a>
+                      <% end %>
+                    <% end %>
+                    <a href="<%= edit_fraispro_path(f.id) %>" class="btn btn-primary"> <i class="material-icons" class="font-size: 5px">edit</i></a>
+                    <a href="<%= duplicate_path(f.id) %>" class="btn btn-primary"> <i class="material-icons">control_point_duplicate</i></a>
+                    <a href="<%= fraispro_path(f.id)%>" class="btn btn-danger" data-method="DELETE"><i class="material-icons">delete</i></a>
+                    </span>
+                </td>
+            </tr>
+            <% end %>
+            <% end %>
+          <%end%>
+          </tbody>
+        </table>
+        <br> <br>
+      <% n += 1 %>
+      <% end %>
 <% end %>

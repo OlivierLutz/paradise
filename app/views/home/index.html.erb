@@ -1,3 +1,8 @@
+
+<% if Param.find_by_user(current_user.email) == nil then %>
+<% p = Param.new ; p.trifraispro = "mois" ; p.user = current_user.email ; p.save  %>
+<% end %>
+
 <Span>
 <% if Categ.find_by_user(current_user.email) == nil then %>
 <% p = Categ.new ; p.nature = "Loyer/Rétrocession Cabinet" ; p.user = current_user.email ; p.souscat = "Local profesionnel" ; p.deductibilite = 100 ; p.save  %>
@@ -55,3 +60,5 @@
   <%= link_to "S'inscrire", signup_path %> 
 
 <% end %>
+
+
