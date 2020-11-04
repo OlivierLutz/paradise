@@ -74,7 +74,7 @@
             <% if f.date.strftime("%m") == if x < 10 then "0"+x.to_s else x.to_s end %> 
             <% if f.user == current_user.email %>
             <tr>
-                <th><span style= "font-weight:normal"><%= if f.description == nil then f.nature else f.description end %></span></th>
+                <th><span style= "font-weight:normal"><%= if f.description == "" then f.nature else f.description end %></span></th>
                 <td><span style="float:right;"><%= f.bank %></span></td>
                 <td><span style="float:right;"><%= f.date.strftime("%d/%m") %></span></td>
                 <td><span style="float:right;"><%= number_to_currency(f.montant, :unit => "€", locale: :fr, precision: 1 ) %></span></td>
@@ -241,7 +241,7 @@
             <% if f.user == current_user.email %>
             <% if f.nature == categories[n] %>
             <tr>
-                <th><span style= "font-weight:normal"><%= if f.description == nil then f.nature else f.description end %></span></th>
+                <th><span style= "font-weight:normal"><%= if f.description == "" then f.nature else f.description end %></span></th>
                 <td><span style="float:right;"><%= f.bank %></span></td>
                 <td><span style="float:right;"><%= f.date.strftime("%d/%m") %></span></td>
                 <td><span style="float:right;"><%= number_to_currency(f.montant, :unit => "€", locale: :fr, precision: 1 ) %></span></td>
