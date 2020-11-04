@@ -35,7 +35,7 @@ class CategsController < ApplicationController
   def update
     respond_to do |format|
       if @categ.update(categ_params)
-        format.html { redirect_to categs_path, notice: 'Mise à jour faite avec succès ! Notez que la catégorie de vos frais professionels déjà encodés ne sera pas automatiquement adaptée' }
+        format.html { redirect_to categs_path, notice: "Mise à jour faite avec succès ! Notez que la catégorie de vos frais professionels déjà encodés ne sera pas automatiquement adaptée. Vous devez réaliser l'adaptation manuellement dans frais pro" }
         format.json { render :index, status: :ok, location: @categ }
       else
         format.html { render :edit }

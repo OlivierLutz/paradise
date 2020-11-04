@@ -30,17 +30,14 @@
 
 <%= bootstrap_form_for(@fraispro) do |f| %>
     <%= f.hidden_field :user, value: current_user.email %>
-    <%= f.text_field :facture %>
-    <%= f.text_field :bank %>
-    <%= f.text_field :privepro, label: "Pourcentage d'utilisation professionnel", append: "%" %>
-    <%= f.text_field :compte,  help: "Indiquez ici le type de compte utilisé pour la transaction (par exemple pro ou privé)" %>
-    <%= f.number_field :montant, append: "€", label: "Prix d'achat" %>
-    <div role="wrapper" class="gj-datepicker gj-datepicker-bootstrap gj-unselectable input-group">
-    <%= f.date_select :date, class:"form-control datepicker" %>
-    </div>
     <%= f.select :nature, grouped_options_for_select(grouped_options) %>  
-    <%= f.text_field :total %>
-    <%= f.text_field :description, help: "Indiquez ici plus de détails ou une éventuelle justification du frais pour vous en rappelez en cas de contrôle" %>
+    <%= f.text_field :facture %>    
+    <%= f.select :compte, [["Pro"], ["Privé"]], { label: "Compte utilisé pour la transaction" } %>
+    <%= f.text_field :bank, label: "Numéro de transaction bancaire"%>
+    <%= f.number_field :montant, append: "€", label: "Prix d'achat" %>
+    <%= f.date_select :date, label: "Date de la facture", help: "NB: La date fiscale correspond à la date de la facture et non celle du paiement" %>
+    <%= f.text_field :privepro, label: "Pourcentage d'utilisation professionnel", append: "%" , value:100%>
+    <%= f.text_area :description, help: "Indiquez ici plus de détails ou une éventuelle justification du frais pour vous en rappelez en cas de contrôle" %>
     </br>
     <%= f.submit "Enregistrer", class: 'btn btn-primary' %>
 <% end %>

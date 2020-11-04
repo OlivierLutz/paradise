@@ -1,15 +1,26 @@
 <h1>Vos frais professionnels</h1>
  <br>
-
-
  
-      
-<% if Param.find_by(user: current_user.email, trifraispro: "mois").present? %>
-
+<div class="text-center">
+<table style="background-color: #f4f4f4">
+ <%= bootstrap_form_for(Param.find_by_user(current_user.email)) do |f| %>
+  <%= f.hidden_field :trifraispro, value: "mois" %>
+  <th class="tier"><%= f.submit "      Par mois      ", class: 'btn btn-primary' %></th>
+<% end %>
 <%= bootstrap_form_for(Param.find_by_user(current_user.email)) do |f| %>
   <%= f.hidden_field :trifraispro, value: "categorie" %>
-  <%= f.submit "Par catégorie", class: 'btn btn-primary' %>
+  <th class="tier"><%= f.submit "  Par catégorie  ", class: 'btn btn-primary' %></th>
 <% end %>
+<%= bootstrap_form_for(Param.find_by_user(current_user.email)) do |f| %>
+  <%= f.hidden_field :trifraispro, value: "categoriesimple" %>
+  <th class="tier"><%= f.submit "Par catégorie simple", class: 'btn btn-primary' %></th>
+<% end %>
+</table>
+</div>
+      
+<% if Param.find_by(user: current_user.email, trifraispro: "mois").present? %>
+<span>
+
 
       <br>  <br>
 
@@ -49,13 +60,13 @@
           <thead>
             <tr>
               <th scope="col">Description</th>
-              <th scope="col"><span style="float:right;">Bank</span></th>
+              <th scope="col"><span style="float:right;">#Bank</span></th>
               <th scope="col"><span style="float:right;">Date</span></th>
-              <th scope="col"><span style="float:right;">Total</span></th>
-              <th scope="col"><span style="float:right;">Pro</span></th>
-              <th scope="col"><span style="float:right;">Admis</span></th>
-              <th scope="col"><span style="float:right;">Déductible</span></th>
-              <th scope="col"><span style="float:right;">Action</span></th>
+              <th scope="col"><span style="float:right;">Prix d'achat</span></th>
+              <th scope="col"><span style="float:right;">%Pro</span></th>
+              <th scope="col"><span style="float:right;">%Admis</span></th>
+              <th scope="col"><span style="float:right;">Total déduct.</span></th>
+              <th scope="col"><span style="float:right;"></span></th>
             </tr>
           </thead>
           <tbody>
@@ -63,13 +74,27 @@
             <% if f.date.strftime("%m") == if x < 10 then "0"+x.to_s else x.to_s end %> 
             <% if f.user == current_user.email %>
             <tr>
-                <th><span style= "font-weight:normal"><%= f.nature %> <%= f.description %></span></th>
+                <th><span style= "font-weight:normal"><%= if f.description == nil then f.nature else f.description end %></span></th>
                 <td><span style="float:right;"><%= f.bank %></span></td>
                 <td><span style="float:right;"><%= f.date.strftime("%d/%m") %></span></td>
-                <td><span style="float:right;"><%= number_to_currency(f.total, :unit => "€", locale: :fr, precision: 1 ) %></span></td>
-                <td><span style="float:right;"><%= number_to_percentage(f.privepro, precision:0) %></span></td>
-                <td><span style="float:right;"><%= number_to_percentage(f.deductibilite, precision:0) %></span></td>
                 <td><span style="float:right;"><%= number_to_currency(f.montant, :unit => "€", locale: :fr, precision: 1 ) %></span></td>
+                <td><span style="float:right;"><%= number_to_percentage(f.privepro, precision:0) %></span></td>
+                
+             <%#Corréler la nature avec la déductibilité définie dans catégorie %>
+                <% e = f.nature %>
+                <% d = f.deductibilite %>
+                <% admin = 0 %>
+                <td><span style="float:right;">
+                  <% if Categ.find_by(user: current_user.email, nature: e).present? %>
+                    <% p = Categ.find_by(user: current_user.email, nature: e) %>
+                    <%= number_to_percentage(p.deductibilite, precision:0) %>
+                    <% admin = p.deductibilite %>
+                  <% else %>
+                    <%= number_to_percentage(d, precision:0) %>
+                    <% admin = d %>
+                  <% end %></span></td>   
+              
+                <td><span style="float:right;"><%= number_to_currency(f.montant*(admin/100)*(f.privepro/100), :unit => "€", locale: :fr, precision: 1 ) %></span></td>
                 <td><span style="float:right;">
                     <% if f.facture == nil %>
                     <% else %>
@@ -95,13 +120,69 @@
         <br> <br>
         <% end %>
       <% end %>
+</span>
+<% elsif Param.find_by(user: current_user.email, trifraispro: "categoriesimple").present? %>
+<span>
 
+
+      <br>  <br>
+
+      <% categories = [] %>
+      
+        <% Fraispro.all.each do |f| %>
+          <% if f.user == current_user.email %>
+            <% categories << f.nature %>
+          <% end %>
+        <% end %>
+        
+      <% categories = categories.uniq %>
+      <% categoriestot = Array.new(categories.size, 0) %>
+      <% categoriesdeductibilitetot = Array.new(categories.size, 0) %>
+      
+      <% n = 0 %>
+      <% while n != categories.size %>
+        <% count = 0 %>
+        <% Fraispro.all.each do |f| %>
+          <% if f.user == current_user.email %>
+          <% if f.nature == categories[n] %>
+              <% categoriestot[n] += f.montant %>
+              <% if f.deductibilite == nil then else %>
+              <% categoriesdeductibilitetot[n] += f.deductibilite %>
+              <% count += 1 %>
+              <% end %>
+          <% end %>
+          <% end %> 
+        <% end %>
+        <% if count == 0 then else %>
+        <% categoriesdeductibilitetot[n] /= count %>
+        <% end %>
+      <% n += 1 %>
+      <% end %>
+
+<table>
+<thead>
+  <tr>
+    <th scope="col">Type de frais</th>
+    <th scope="col"><span style="float:right;">Montant total pro</span></th>
+    <th scope="col"><span style="float:right;">% admis</span></th>
+    <th scope="col"><span style="float:right;">Montant déductible</span></th>
+  </tr>
+</thead>     
+      <% n = 0 %>
+      <% while n != categories.size %>
+        <tr>
+          <th><p style="text-align:left;"><%= categories[n] %></th>
+          <th><span style="float:right;"><%= number_to_currency(categoriestot[n], :unit => "€", locale: :fr) %></span></p></th>
+          <th><span style="float:right;"><%= categoriesdeductibilitetot[n] %> % </span></p></th>
+          <th><span style="float:right;"><%= number_to_currency(categoriestot[n], :unit => "€", locale: :fr) %></span></p></th>
+        </tr>
+      <% n += 1 %>
+      <% end %>
+</table>
+</span>
 <% elsif Param.find_by(user: current_user.email, trifraispro: "categorie").present? %>
+<span>
 
-<%= bootstrap_form_for(Param.find_by_user(current_user.email)) do |f| %>
-  <%= f.hidden_field :trifraispro, value: "mois" %>
-  <%= f.submit "Par mois", class: 'btn btn-primary' %>
-<% end %>
 
       <br>  <br>
 
@@ -146,13 +227,13 @@
           <thead>
             <tr>
               <th scope="col">Description</th>
-              <th scope="col"><span style="float:right;">Bank</span></th>
+              <th scope="col"><span style="float:right;">#Bank</span></th>
               <th scope="col"><span style="float:right;">Date</span></th>
-              <th scope="col"><span style="float:right;">Total</span></th>
-              <th scope="col"><span style="float:right;">Pro</span></th>
-              <th scope="col"><span style="float:right;">Admis</span></th>
-              <th scope="col"><span style="float:right;">Déductible</span></th>
-              <th scope="col"><span style="float:right;">Action</span></th>
+              <th scope="col"><span style="float:right;">Prix d'achat</span></th>
+              <th scope="col"><span style="float:right;">%Pro</span></th>
+              <th scope="col"><span style="float:right;">%Admis</span></th>
+              <th scope="col"><span style="float:right;">Total déduct.</span></th>
+              <th scope="col"><span style="float:right;"></span></th>
             </tr>
           </thead>
           <tbody>
@@ -160,13 +241,27 @@
             <% if f.user == current_user.email %>
             <% if f.nature == categories[n] %>
             <tr>
-                <th><span style= "font-weight:normal"><%= f.nature %> <%= f.description %></span></th>
+                <th><span style= "font-weight:normal"><%= if f.description == nil then f.nature else f.description end %></span></th>
                 <td><span style="float:right;"><%= f.bank %></span></td>
                 <td><span style="float:right;"><%= f.date.strftime("%d/%m") %></span></td>
-                <td><span style="float:right;"><%= number_to_currency(f.total, :unit => "€", locale: :fr, precision: 1 ) %></span></td>
-                <td><span style="float:right;"><%= number_to_percentage(f.privepro, precision:0) %></span></td>
-                <td><span style="float:right;"><%= number_to_percentage(f.deductibilite, precision:0) %></span></td>
                 <td><span style="float:right;"><%= number_to_currency(f.montant, :unit => "€", locale: :fr, precision: 1 ) %></span></td>
+                <td><span style="float:right;"><%= number_to_percentage(f.privepro, precision:0) %></span></td>
+  
+                <%#Corréler la nature avec la déductibilité définie dans catégorie %>
+                <% e = f.nature %>
+                <% d = f.deductibilite %>
+                <% admin = 0 %>
+                <td><span style="float:right;">
+                  <% if Categ.find_by(user: current_user.email, nature: e).present? %>
+                    <% p = Categ.find_by(user: current_user.email, nature: e) %>
+                    <%= number_to_percentage(p.deductibilite, precision:0) %>
+                    <% admin = p.deductibilite %>
+                  <% else %>
+                    <%= number_to_percentage(d, precision:0) %>
+                    <% admin = d %>
+                  <% end %></span></td>                
+                
+                <td><span style="float:right;"><%= number_to_currency(f.montant*(admin/100)*(f.privepro/100), :unit => "€", locale: :fr, precision: 1 ) %></span></td>
                 <td><span style="float:right;">
                     <% if f.facture == nil %>
                     <% else %>
@@ -192,4 +287,5 @@
         <br> <br>
       <% n += 1 %>
       <% end %>
+</span>
 <% end %>
