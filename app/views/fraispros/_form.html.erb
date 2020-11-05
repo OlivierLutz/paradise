@@ -17,8 +17,10 @@
         <% tmp = [] %>
         <% a += 2 %>
             <% Categ.all.each do |f| %>
+                <% if f.user == current_user.email %>
                 <% if f.souscat == souscategories[x] %>
                    <% tmp << f.nature %>
+                <% end %>
                 <% end %>
             <% end %>
         <% sousgroupe << tmp %>
@@ -26,7 +28,6 @@
     <% end %>
 <%# Concatenation des Catégories et des sous-catégories pour avoir une array traitable par select et grouped_options_for_select!!! %>
 <% grouped_options = grouped_options.zip(sousgroupe) %>
-<%= grouped_options %>
 
 
 <%= bootstrap_form_for(@fraispro) do |f| %>

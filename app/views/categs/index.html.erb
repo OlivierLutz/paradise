@@ -35,8 +35,10 @@
         <td><span style="float:left;"><%= f.nature %></span></td>
         <td><span style="float:right;"><%= f.deductibilite %></span></td>
         <td><span style="float:right;">
+          <% if f.nature != "Cotisations sociales personnelles (Acerta, Xerius, Partena, ...)" %>
           <a href="<%= edit_categ_path(f.id) %>" class="btn btn-primary"> <i class="material-icons" class="font-size: 5px">edit</i></a>
           <a href="<%= categ_path(f.id)%>" class="btn btn-danger" data-method="DELETE"><i class="material-icons">delete</i></a>
+          <% end %>
         </span></td>
       </tr>
 

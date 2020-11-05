@@ -1,19 +1,9 @@
 <h1>Edition d'une catégorie professionelle</h1>
 
-<%# Récupération des catégories %>
-<% souscategories = [] %>
-    <% Categ.all.each do |f| %>
-        <% if f.user == current_user.email %>
-            <% souscategories << f.souscat %>
-        <% end %>
-    <% end %>
-<% grouped_options = souscategories.uniq %>
-
 
 <%= bootstrap_form_for(@categ) do |f| %>
-    <%= f.static_control :user, label: "Utilisateur:", layout: :horizontal, label_col: "col-sm-1", control_col: "col-sm-11" %></br>
     <%= f.text_field :nature, label: "Catégorie" %>
-    <%= f.select :souscat, options_for_select(grouped_options), label: "Catégorie mère" %>
+
     <%= f.number_field :deductibilite, append: "%", label: "Déductibilité légale maximum", help: "Ne pas confondre avec la part privée et professionnelle qui elle est indiquée lors de l'encodage de chaque frais professionnel" %>
     </br>
     <%= f.submit "Enregistrer", class: 'btn btn-primary' %>
@@ -21,5 +11,3 @@
 </br>
 
 <a href="<%= categs_path%>" class="btn btn-danger"><i class="material-icons">arrow_back</i> Retour</a>
-
-
