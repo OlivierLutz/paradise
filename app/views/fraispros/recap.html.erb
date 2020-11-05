@@ -1,0 +1,75 @@
+<h1>Récapitulatif et calcul</h1>
+<br>
+<br>
+<br>
+ 
+<% revenueTotal = 0 %>
+<% Revenu.all.each do |f| %>
+  <% if f.user == current_user.email %>
+    <% revenueTotal += f.revenuindep %>
+  <% end %>
+<% end %>
+
+<% fraisTotal = 0 %>
+<% Fraispro.all.each do |f| %>
+  <% if f.user == current_user.email %>
+  <% p = Categ.find_by(user: current_user.email, nature: f.nature) %>
+  <% deductibilite = p.deductibilite %>
+    <% fraisTotal += f.montant*(deductibilite.fdiv(100))*((f.privepro).fdiv(100)) %>
+  <% end %>
+<% end %>
+
+<% net = revenueTotal-fraisTotal %>
+
+ 
+Recettes indépendants:   <b><%= number_to_currency(revenueTotal, :unit => "€", locale: :fr, precision: 0 ) %></b>
+<br>
+<br>
+
+Frais professionnels:   <b><%= number_to_currency(fraisTotal, :unit => "€", locale: :fr, precision: 0 ) %></b>
+<br>
+<br>
+
+
+Solde total net avant impôt:   <b><%= number_to_currency(revenueTotal-fraisTotal, :unit => "€", locale: :fr, precision: 0 ) %></b>
+<br>
+<br>
+
+<%# Cotisation déjà payé nature = cotisations sociales %>
+<% cotisationpayer = 0 %>
+<% Fraispro.all.each do |f| %>
+  <% if f.user == current_user.email %>
+  <% if f.nature == "Cotisations sociales personnelles (Acerta, Xerius, Partena, ...)" %>
+    <% cotisationpayer += f.montant %>
+  <% end %>
+  <% end %>
+<% end %>
+<br>
+<br>
+Cotisations Sociales trimestrielles:   <b><%= number_to_currency(if net <0 then 0 else (net*0.234).fdiv(4) end, :unit => "€", locale: :fr, precision: 0 ) %></b>
+<br>
+<br>
+<% if cotisationpayer > net*0.234 %>
+Cotisations Sociales à <b><u>retoucher</b></u> :   <b><%= number_to_currency(-(net*0.234-cotisationpayer), :unit => "€", locale: :fr, precision: 0 ) %></b>
+<% else %>
+Cotisations Sociales restant encore à payer:   <b><%= number_to_currency(net*0.234-cotisationpayer, :unit => "€", locale: :fr, precision: 0 ) %></b>
+<% end %>
+<br>
+<br>
+<br>
+<br>
+<% exempte = 8860 %>
+<% impot = 0 %>
+<% if net <= 13250 then impot += net*0.25 end %>
+<% if net > 40800 then impot += ((net-40800)*0.5)+15059 end %>
+<% if net > 23390 && net <= 40800 then impot +=  ((net-23390)*0.45)+7368.5 end %>
+<% if net > 13250 && net <= 23390 then impot +=  ((net-13250)*0.40)+3312.5 end %>
+<% if net < exempte then impot = 0 else impot -= (exempte*0.25) end %>
+
+Impôt annuel:   <b><%= number_to_currency(impot, :unit => "€", locale: :fr, precision: 0 ) %></b>
+<br>
+<br>
+
+Taux global:   <b><%= if impot = 0 then 0 else impot.fdiv(net) end %>% </b>
+<br>
+<br>

@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   get 'duplicate/:id', to: 'fraispros#duplicate', as: 'duplicate'
   resources :revenus
   get "fraispros-categ", to: "fraispros#index2", as: 'fraispros_categ'
+  get "recap", to: "fraispros#recap", as: 'recap'
   
 
   resources :fraispros

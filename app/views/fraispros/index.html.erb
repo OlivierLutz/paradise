@@ -28,7 +28,9 @@
       
       <% @fraispros.each do |f| %>
         <% if f.user == current_user.email %>
-               <% totalFPmois[f.date.strftime("%m").to_f] += f.montant %>
+          <% p = Categ.find_by(user: current_user.email, nature: f.nature) %>
+          <% deductibilite = p.deductibilite %>
+          <% totalFPmois[f.date.strftime("%m").to_f] += f.montant*(deductibilite/100)*(f.privepro/100) %>
         <% end %>       
       <% end %>
         
@@ -145,7 +147,9 @@
         <% Fraispro.all.each do |f| %>
           <% if f.user == current_user.email %>
           <% if f.nature == categories[n] %>
-              <% categoriestot[n] += f.montant %>
+              <% p = Categ.find_by(user: current_user.email, nature: f.nature) %>
+              <% deductibilite = p.deductibilite %>
+              <% categoriestot[n] += f.montant*(deductibilite/100)*(f.privepro/100) %>
               <% if f.deductibilite == nil then else %>
               <% categoriesdeductibilitetot[n] += f.deductibilite %>
               <% count += 1 %>
@@ -202,7 +206,9 @@
         <% Fraispro.all.each do |f| %>
           <% if f.user == current_user.email %>
           <% if f.nature == categories[n] %>
-              <% categoriestot[n] += f.montant %>
+              <% p = Categ.find_by(user: current_user.email, nature: f.nature) %>
+              <% deductibilite = p.deductibilite %>
+              <% categoriestot[n] += f.montant*(deductibilite/100)*(f.privepro/100) %>
           <% end %>
           <% end %> 
         <% end %>

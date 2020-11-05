@@ -16,6 +16,10 @@ class FraisprosController < ApplicationController
   def show
   end
 
+  def recap
+  
+  end
+
   # GET /fraispros/new
   def new
     @fraispro = Fraispro.new
